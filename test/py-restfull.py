@@ -79,3 +79,14 @@ def test_default_404_response(client):
 
     assert response.status_code == 404
     assert response.text == "Not found."
+
+
+def test_alternative_route(api, client):
+    response_text = "Alternative way to add a route"
+
+    def home(req, resp):
+        resp.text = response_text
+
+    api.add_route("/alternative", home)
+
+    assert client.get("http://testserver/alternative").text == response_text
