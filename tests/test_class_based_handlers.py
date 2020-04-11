@@ -9,10 +9,10 @@ def test_class_based_handler_get(app, client):
 
     @app.route("/book")
     class BookResource:
-        def get(self, req, resp):
+        def get(self, req, resp, **kwargs):
             resp.text = response_text
 
-    assert client.get(url("/book")).text == response_text
+    assert client.get(url("/book/1")).text == response_text
 
 
 def test_class_based_handler_post(app, client):
