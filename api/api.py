@@ -5,7 +5,7 @@ from requests import Session
 from whitenoise import WhiteNoise
 from wsgiadapter import WSGIAdapter
 
-from middleware import Middleware
+from api.middleware import Middleware
 from utils import cut_static_root, empty_wsgi_app, request_for_static
 from utils.error_handlers import debug_exception_handler
 from utils.exceptions import HTTPError

@@ -1,5 +1,5 @@
 from api.api import API
-from middleware import Middleware
+from api.middleware import Middleware
 
 app = API(templates_dir="templates")
 

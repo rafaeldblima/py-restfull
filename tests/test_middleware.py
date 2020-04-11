@@ -1,4 +1,4 @@
-from middleware import Middleware
+from api.middleware import Middleware
 from utils.tests import url
 
 
