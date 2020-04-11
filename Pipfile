@@ -5,6 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 flake8 = "==3.7.9"
+pytest = "==5.4.1"
 
 [packages]
 gunicorn = "==20.0.4"
