@@ -8,14 +8,29 @@ from webob import Request, Response
 from whitenoise import WhiteNoise
 from wsgiadapter import WSGIAdapter
 
+from middleware import Middleware
+
 
 class API:
+
+    def __call__(self, environ, start_response):
+        path_info = environ["PATH_INFO"]
+
+        if path_info.startswith(f"/{self._static_dir}"):
+            environ["PATH_INFO"] = path_info[len(f"/{self._static_dir}"):]
+            return self.whitenoise(environ, start_response)
+        return self.middleware(environ, start_response)
 
     def __init__(self, templates_dir='templates', static_dir="static"):
         self.routes = {}
         self.exception_handler = None
         self.templates_env = Environment(loader=FileSystemLoader(os.path.abspath(templates_dir)))
         self.whitenoise = WhiteNoise(self.wsgi_app, root=static_dir)
+        self._static_dir = static_dir
+        self.middleware = Middleware(self)
+
+    def add_middleware(self, middleware_cls):
+        self.middleware.add(middleware_cls)
 
     def wsgi_app(self, environ, start_response):
         request = Request(environ)
@@ -23,9 +38,6 @@ class API:
         response = self.handle_request(request)
 
         return response(environ, start_response)
-
-    def __call__(self, environ, start_response):
-        return self.whitenoise(environ, start_response)
 
     def add_exception_handler(self, exception_handler):
         self.exception_handler = exception_handler
