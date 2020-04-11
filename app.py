@@ -33,3 +33,15 @@ class BooksHandler:
 
     def delete(self, req, resp):
         resp.text = "Endpoint to delete a book"
+
+
+def custom_exception_handler(request, response, exception_cls):
+    response.text = "Oops! Something went wrong."
+
+
+app.add_exception_handler(custom_exception_handler)
+
+
+@app.route("/error")
+def exception_throwing_handler(request, response):
+    raise AssertionError("This handler should not be user")
