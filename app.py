@@ -1,11 +1,11 @@
 from api import API
 
-app = API()
+app = API(templates_dir="templates")
 
 
 @app.route("/home")
 def home(request, response):
-    response.text = "Hello from the HOME page"
+    response.body = app.template("home.html", context={"title": "Py-restfull Framework", "name": "py-restfull"})
 
 
 @app.route("/about")
