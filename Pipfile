@@ -9,6 +9,7 @@ flake8 = "==3.7.9"
 [packages]
 gunicorn = "==20.0.4"
 webob = "==1.8.6"
+parse = "==1.15.0"
 
 [requires]
 python_version = "3.8"
