@@ -11,6 +11,8 @@ pytest = "==5.4.1"
 gunicorn = "==20.0.4"
 webob = "==1.8.6"
 parse = "==1.15.0"
+requests = "==2.23.0"
+requests-wsgi-adapter = "==0.4.1"
 
 [requires]
 python_version = "3.8"
