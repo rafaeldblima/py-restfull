@@ -79,17 +79,17 @@ class API:
         response.status_code = 404
         response.text = "Not found."
 
-    def add_route(self, pattern, handler, methods=None):
+    def add_route(self, pattern, handler, methods=None, detail=False):
         """ Add a new route """
         assert pattern not in self._routes, f"Duplicated route: {pattern}"
 
-        self._routes[pattern] = Route(path_pattern=pattern, handler=handler, methods=methods)
+        self._routes[pattern] = Route(path_pattern=pattern, handler=handler, methods=methods, detail=detail)
 
-    def route(self, path, methods=None):
+    def route(self, path, methods=None, detail=False):
         """ Decorator that adds a new route """
 
         def wrapper(handler):
-            self.add_route(path, handler, methods)
+            self.add_route(path, handler, methods, detail)
             return handler
 
         return wrapper

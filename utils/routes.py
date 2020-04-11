@@ -10,18 +10,19 @@ from utils.exceptions import HTTPError
 class Route:
     PK_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'GET']
 
-    def __init__(self, path_pattern, handler, methods=None):
+    def __init__(self, path_pattern, handler, methods=None, detail=False):
         if methods is None:
             methods = ALL_HTTP_METHODS
 
-        if any(True for x in methods if x in self.PK_METHODS):
-            self._patterns = [path_pattern, path_pattern + '{pk}']
+        if (any(True for x in methods if x in self.PK_METHODS) and isclass(handler)) or detail:
+            self._patterns = [path_pattern, path_pattern + '/', path_pattern + '/{pk}']
         else:
-            self._patterns = [path_pattern]
+            self._patterns = [path_pattern, path_pattern + '/']
         self._handler = handler
         self._methods = [method.upper() for method in methods]
 
     def match(self, request_path):
+        result = None
         for pattern in self._patterns:
             result = parse(pattern, request_path)
             if result:
