@@ -5,7 +5,7 @@ class Middleware:
 
     def __call__(self, environ, start_response):
         request = Request(environ)
-        response = self.app.handle_request(request)
+        response = self.app.dispatch_request(request)
         return response(environ, start_response)
 
     def __init__(self, app):
@@ -20,9 +20,9 @@ class Middleware:
     def process_response(self, req, resp):
         pass
 
-    def handle_request(self, request):
+    def dispatch_request(self, request):
         self.process_request(request)
-        response = self.app.handle_request(request)
+        response = self.app.dispatch_request(request)
         self.process_response(request, response)
 
         return response

@@ -1,7 +1,8 @@
 from pytest import fixture, raises
 from requests import Session
 
-from api import API
+from api.api import API
+from utils.exceptions import HTTPError
 
 
 @fixture
@@ -11,7 +12,7 @@ def api():
 
 @fixture
 def client(api) -> Session:
-    return api.test_session()
+    return api.session()
 
 
 def test_basic_route(api):
@@ -34,7 +35,7 @@ def test_route_overlap_throws_exception(api):
 def test_client_can_send_requests(api, client):
     RESPONSE_TEXT = "TEXT_RESPONSE"
 
-    @api.route("/test")
+    @api.route("/tests")
     def test(req, resp):
         resp.text = RESPONSE_TEXT
 
@@ -70,15 +71,15 @@ def test_class_handler_requests(api, client):
     assert client.get("http://testserver/book").status_code == 200
     assert client.post("http://testserver/book").text == POST_RESP
     assert client.delete("http://testserver/book").text == DELETE_RESP
-    with raises(AttributeError):
+    with raises(HTTPError):
         assert client.put("http://testserver/book").text == ''
 
 
 def test_default_404_response(client):
-    response = client.get("http://testserver/doesnotexist")
-
-    assert response.status_code == 404
-    assert response.text == "Not found."
+    with raises(HTTPError):
+        response = client.get("http://testserver/doesnotexist")
+        assert response.status_code == 404
+        assert response.text == "Not found."
 
 
 def test_alternative_route(api, client):

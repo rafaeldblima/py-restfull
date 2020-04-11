@@ -8,6 +8,7 @@ exclude=
     build,
     dist,
     venv,
-    */migrations
+    */migrations,
+    __init__.py
 max-complexity=12
 max-line-length=120
