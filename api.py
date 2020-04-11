@@ -38,6 +38,8 @@ class API:
         response.text = "Not found."
 
     def route(self, path):
+        assert path not in self.routes, f"Duplicated route: {path}"
+
         def wrapper(handler):
             self.routes[path] = handler
             return handler
