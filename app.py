@@ -1,5 +1,3 @@
-import json
-
 from bson import ObjectId
 
 from api import API
@@ -25,7 +23,8 @@ class BooksHandler:
         resp.json = json
 
     def post(self, req, resp):
-        resp.text = "Endpoint to create a book"
+        b = Book(**req.json)
+        resp.json = b.dictify()
 
-    def delete(self, req, resp):
+    def delete(self, req, resp, pk):
         resp.text = "Endpoint to delete a book"
