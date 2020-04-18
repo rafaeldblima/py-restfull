@@ -27,4 +27,6 @@ class BooksHandler:
         resp.json = b.dictify()
 
     def delete(self, req, resp, pk):
-        resp.text = "Endpoint to delete a book"
+        book = Book.query.get(_id=ObjectId(pk))
+        book.delete()
+        resp.status_code = 204

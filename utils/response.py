@@ -25,7 +25,8 @@ class Response:
             self.body = self.text
             self.content_type = "text/plain"
 
-        assert self.body, "No content found."
+        if self.status_code != 204:
+            assert self.body, "No content found."
 
     def __call__(self, environ, start_response):
         self.set_body_and_content_type()

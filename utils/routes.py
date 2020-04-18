@@ -15,7 +15,7 @@ class Route:
             methods = ALL_HTTP_METHODS
 
         if (any(True for x in methods if x in self.PK_METHODS) and isclass(handler)) or detail:
-            self._patterns = [path_pattern, path_pattern + '/', path_pattern + '/{pk}']
+            self._patterns = [path_pattern, path_pattern + '/', path_pattern + '/{pk}/', path_pattern + '/{pk}']
         else:
             self._patterns = [path_pattern, path_pattern + '/']
         self._handler = handler
