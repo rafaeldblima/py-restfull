@@ -36,7 +36,13 @@ class BooksHandler:
         properties_to_update = Book.get_all_properties()
         if all(x in req_body for x in properties_to_update):
             book = Book.query.get(_id=ObjectId(pk))
-            for prop in properties_to_update:
-                new_attr = req_body.get(prop)
-                setattr(book, prop, new_attr)
+            for key, value in req_body.items():
+                setattr(book, key, value)
             resp.json = book.dictify()
+
+    def patch(self, req, resp, pk):
+        req_body = req.json
+        book = Book.query.get(_id=ObjectId(pk))
+        for key, value in req_body.items():
+            setattr(book, key, value)
+        resp.json = book.dictify()
