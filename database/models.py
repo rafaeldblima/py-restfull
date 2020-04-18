@@ -1,3 +1,4 @@
+import inspect
 from datetime import datetime
 from decimal import Decimal
 
@@ -30,6 +31,15 @@ class BaseClass(MappedClass):
             elif isinstance(props[key], Decimal128) or isinstance(props[key], Decimal):
                 props[key] = float(str(props[key]))
         return props
+
+    @classmethod
+    def get_all_properties(cls):
+        attributes = inspect.getmembers(cls, lambda a: not (inspect.isroutine(a)))
+        attributes = [a for a in attributes if not (a[0].startswith('__') and a[0].endswith('__'))]
+        # TODO: alterar fieldProperty caso tenha algum outro tipo de campo
+        return [a[0] for a in attributes if
+                isinstance(a[1], FieldProperty) and a[0] != 'created_at' and a[0] != 'updated_at' and a[0] != '_id'
+                ]
 
 
 class UpdatedAtExtension(MapperExtension):

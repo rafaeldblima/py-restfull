@@ -30,3 +30,13 @@ class BooksHandler:
         book = Book.query.get(_id=ObjectId(pk))
         book.delete()
         resp.status_code = 204
+
+    def put(self, req, resp, pk):
+        req_body = req.json
+        properties_to_update = Book.get_all_properties()
+        if all(x in req_body for x in properties_to_update):
+            book = Book.query.get(_id=ObjectId(pk))
+            for prop in properties_to_update:
+                new_attr = req_body.get(prop)
+                setattr(book, prop, new_attr)
+            resp.json = book.dictify()
