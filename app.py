@@ -13,6 +13,22 @@ def home(request, response):
     response.body = app.template("home.html", context={"title": "Py-restfull Framework", "name": "py-restfull"})
 
 
+@app.route("/book/average-price")
+def home(rqe, res):
+    result = list(
+        Book.query.aggregate(
+            [
+                {'$match': {'price': {'$gt': 0}}},
+                {'$group': {'_id': None, 'count': {"$avg": {"$toDecimal": "$price"}}}}
+            ]
+        )
+    )
+    if result:
+        res.json = {'average': float(str(result[0].get('count')))}
+    else:
+        res.status_code = 204
+
+
 @app.route("/book")
 class BooksHandler:
     def get(self, req, resp, pk=None):
