@@ -14,7 +14,7 @@ def home(request, response):
 
 
 @app.route("/book/average-price")
-def home(rqe, res):
+def average_price(req, res):
     result = list(
         Book.query.aggregate(
             [

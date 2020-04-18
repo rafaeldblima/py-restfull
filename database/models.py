@@ -4,16 +4,13 @@ from decimal import Decimal
 
 from bson import Decimal128
 from bson import ObjectId as obj_id
-from ming.odm import FieldProperty, MappedClass, ThreadLocalODMSession, MapperExtension, mapper
+from ming.odm import FieldProperty, MappedClass, MapperExtension, mapper
 from ming.schema import ObjectId, String, NumberDecimal, DateTime
 
 from .session import session
 
 
 class BaseClass(MappedClass):
-    class __mongometa__:
-        session: ThreadLocalODMSession = None
-        name = None
 
     def save(self):
         self.__mongometa__.session.flush_all()
@@ -57,7 +54,7 @@ class Timeable(MappedClass):
 
 class Book(BaseClass, Timeable):
     class __mongometa__:
-        session: ThreadLocalODMSession = session
+        session = session
         name = 'book'
 
     _id = FieldProperty(ObjectId)
