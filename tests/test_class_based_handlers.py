@@ -20,10 +20,10 @@ def test_class_based_handler_post(app, client):
 
     @app.route("/book")
     class BookResource:
-        def post(self, req, resp, pk):
+        def put(self, req, resp, pk):
             resp.text = response_text
 
-    assert client.post(url("/book/1")).text == response_text
+    assert client.put(url("/book/1")).text == response_text
 
 
 def test_class_based_handler_not_allowed_method(app, client):

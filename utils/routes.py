@@ -8,7 +8,7 @@ from utils.exceptions import HTTPError
 
 
 class Route:
-    PK_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'GET']
+    PK_METHODS = ['PUT', 'PATCH', 'DELETE', 'OPTIONS', 'GET']
 
     def __init__(self, path_pattern, handler, methods=None, detail=False):
         if methods is None:

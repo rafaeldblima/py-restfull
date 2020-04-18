@@ -1,6 +1,9 @@
 from datetime import datetime
+from decimal import Decimal
 
-from ming.odm import FieldProperty, MappedClass, ThreadLocalODMSession, MapperExtension
+from bson import Decimal128
+from bson import ObjectId as obj_id
+from ming.odm import FieldProperty, MappedClass, ThreadLocalODMSession, MapperExtension, mapper
 from ming.schema import ObjectId, String, NumberDecimal, DateTime
 
 from .session import session
@@ -14,10 +17,23 @@ class BaseClass(MappedClass):
     def save(self):
         self.__mongometa__.session.flush_all()
 
+    def dictify(self):
+        prop_names = [prop.name for prop in mapper(self).properties
+                      if isinstance(prop, FieldProperty)]
+        props = {}
+        for key in prop_names:
+            props[key] = getattr(self, key)
+            if isinstance(props[key], obj_id):
+                props[key] = str(props.get(key))
+            elif isinstance(props[key], datetime):
+                props[key] = props[key].isoformat()
+            elif isinstance(props[key], Decimal128) or isinstance(props[key], Decimal):
+                props[key] = float(str(props[key]))
+        return props
+
 
 class UpdatedAtExtension(MapperExtension):
     def before_update(self, instance, state, sess):
-        print('passou')
         instance.updated_at = datetime.utcnow()
 
 
